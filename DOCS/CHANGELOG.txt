@@ -1,0 +1,15 @@
+0.9.0.el7 - November 17, 2015
+
+- Added ALERT-AND-BUGS documentation to the installer
+  regarding Domains usage with keystone V3 and some
+  OpenStack bugs with postgres affecting cinder and
+  trove.
+- Added Keystone V3 support to Horizon.
+- Included some ALERTS in the main config file.
+- Added the capability to provision VLAN external net-
+  works along the FLAT external ones.
+- All modules converted to LIBERTY from former installer
+  made for Kilo.
+- Fully converted to Identity V3.
+- New options for FLAT networks configuration (neutron
+  install module).
