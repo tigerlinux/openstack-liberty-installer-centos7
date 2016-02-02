@@ -135,7 +135,7 @@ systemctl daemon-reload
 # Network Node or ALL-IN-ONE Server
 #
 
-if [ $neutron_in_compute_node == "no" ]
+if [ $neutron_in_compute_node == "no" ] || [ $dhcp_agents_in_compute_node == "yes" ]
 then
 	echo ""
 	echo "Installing DNSMASQ"
@@ -294,7 +294,16 @@ crudini --del /etc/neutron/neutron.conf keystone_authtoken admin_user
 crudini --del /etc/neutron/neutron.conf keystone_authtoken admin_password
  
 crudini --set /etc/neutron/neutron.conf DEFAULT agent_down_time 60
-crudini --set /etc/neutron/neutron.conf DEFAULT dhcp_agents_per_network 1
+
+# crudini --set /etc/neutron/neutron.conf DEFAULT dhcp_agents_per_network 1
+
+if [ $dhcp_agents_in_compute_node == "yes" ]
+then
+	crudini --set /etc/neutron/neutron.conf DEFAULT dhcp_agents_per_network $dhcp_agents_per_network
+else
+	crudini --set /etc/neutron/neutron.conf DEFAULT dhcp_agents_per_network 1
+fi
+
 crudini --set /etc/neutron/neutron.conf DEFAULT dhcp_agent_notification True
  
  
@@ -678,102 +687,74 @@ echo "Starting Neutron"
 if [ $neutron_in_compute_node == "yes" ]
 then
 	systemctl enable neutron-ovs-cleanup
-	# chkconfig neutron-ovs-cleanup on
 
 	systemctl disable neutron-server
 	systemctl stop neutron-server
-	# service neutron-server stop
-	# chkconfig neutron-server off
 
 	systemctl disable neutron-dhcp-agent
 	systemctl stop neutron-dhcp-agent
-	# service neutron-dhcp-agent stop
-	# chkconfig neutron-dhcp-agent off
+
+	if [ $dhcp_agents_in_compute_node == "yes" ]
+	then
+		systemctl enable neutron-dhcp-agent
+		systemctl start neutron-dhcp-agent
+	fi
 
 	systemctl start neutron-l3-agent
 	systemctl enable neutron-l3-agent
-	# service neutron-l3-agent start
-	# chkconfig neutron-l3-agent on
 
 	systemctl disable neutron-lbaas-agent
 	systemctl stop neutron-lbaas-agent
-	# service neutron-lbaas-agent stop
-	# chkconfig neutron-lbaas-agent off
 
 	systemctl start neutron-metadata-agent
 	systemctl enable neutron-metadata-agent
-	# service neutron-metadata-agent start
-	# chkconfig neutron-metadata-agent on
 
 	if [ $vpnaasinstall == "yes" ]
 	then
 		systemctl stop neutron-vpn-agent
 		systemctl disable neutron-vpn-agent
-		# service neutron-vpn-agent stop
-		# chkconfig neutron-vpn-agent off
 	fi
 
 	if [ $neutronmetering == "yes" ]
 	then
 		systemctl stop neutron-metering-agent
 		systemctl disable neutron-metering-agent
-		# service neutron-metering-agent stop
-		# chkconfig neutron-metering-agent off
 	fi
 
 	systemctl start neutron-openvswitch-agent
 	systemctl enable neutron-openvswitch-agent
-	# service neutron-openvswitch-agent start
-	# chkconfig neutron-openvswitch-agent on
 else
 	systemctl enable neutron-ovs-cleanup
-	# chkconfig neutron-ovs-cleanup on
 
 	systemctl start neutron-server
 	systemctl enable neutron-server
-	# service neutron-server start
-	# chkconfig neutron-server on
 
 	systemctl start neutron-dhcp-agent
 	systemctl enable neutron-dhcp-agent
-	# service neutron-dhcp-agent start
-	# chkconfig neutron-dhcp-agent on
 
 	systemctl start neutron-l3-agent
 	systemctl enable neutron-l3-agent
-	# service neutron-l3-agent start
-	# chkconfig neutron-l3-agent on
 
 	systemctl start neutron-lbaas-agent
 	systemctl enable neutron-lbaas-agent
-	# service neutron-lbaas-agent start
-	# chkconfig neutron-lbaas-agent on
 
 	systemctl start neutron-metadata-agent
 	systemctl enable neutron-metadata-agent
-	# service neutron-metadata-agent start
-	# chkconfig neutron-metadata-agent on
 
 	if [ $vpnaasinstall == "yes" ]
 	then
 		systemctl start neutron-vpn-agent
 		systemctl enable neutron-vpn-agent
-		# service neutron-vpn-agent start
-		# chkconfig neutron-vpn-agent on
 	fi
 
 	if [ $neutronmetering == "yes" ]
 	then
 		systemctl start neutron-metering-agent
 		systemctl enable neutron-metering-agent
-		# service neutron-metering-agent start
-		# chkconfig neutron-metering-agent on
 	fi
 
 	systemctl start neutron-openvswitch-agent
 	systemctl enable neutron-openvswitch-agent
-	# service neutron-openvswitch-agent start
-	# chkconfig neutron-openvswitch-agent on
 fi
 
 echo "Done"
@@ -885,6 +866,11 @@ else
 		if [ $neutronmetering == "yes" ]
 		then
 			date > /etc/openstack-control-script-config/neutron-full-installed-metering
+		fi
+	else
+		if [ $dhcp_agents_in_compute_node == "yes" ]
+		then
+			date > /etc/openstack-control-script-config/neutron-installed-dhcp-agent
 		fi
 	fi
 fi

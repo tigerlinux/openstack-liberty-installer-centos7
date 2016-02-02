@@ -105,14 +105,27 @@ then
 		)
 	fi
 else
-	svcneutron=(
-		"
-		neutron-ovs-cleanup
-		neutron-openvswitch-agent
-		neutron-l3-agent
-		neutron-metadata-agent
-		"
-	)
+	if [ -f /etc/openstack-control-script-config/neutron-installed-dhcp-agent ]
+	then
+		svcneutron=(
+			"
+			neutron-ovs-cleanup
+			neutron-openvswitch-agent
+			neutron-l3-agent
+			neutron-metadata-agent
+			neutron-dhcp-agent
+			"
+		)
+	else
+		svcneutron=(
+			"
+			neutron-ovs-cleanup
+			neutron-openvswitch-agent
+			neutron-l3-agent
+			neutron-metadata-agent
+			"
+		)
+	fi
 fi
 
 # Nova. Index=5

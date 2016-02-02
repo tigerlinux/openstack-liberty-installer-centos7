@@ -180,10 +180,10 @@ rm -f /etc/cron.d/ceilometer-expirer-crontab
 rm -f /var/log/openstack-install.log
 rm -fr /var/lib/openstack-dashboard
 
-service crond restart
-
 rm -f /root/keystonerc_admin
 rm -f /root/ks_admin_token
+rm -f /root/keystonerc_fulladmin
+
 rm -f /usr/local/bin/openstack-control.sh
 rm -f /usr/local/bin/openstack-log-cleaner.sh
 rm -f /usr/local/bin/openstack-keystone-tokenflush.sh
@@ -195,6 +195,8 @@ rm -f /etc/cron.d/keystone-flush.crontab
 rm -f /etc/httpd/conf.d/wsgi-keystone.conf
 rm -rf /var/www/cgi-bin/keystone
 rm -f /etc/libvirt/qemu/$instance_name_template*.xml
+
+service crond restart
 
 #
 # Restore original snmpd configuration
