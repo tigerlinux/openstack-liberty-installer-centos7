@@ -1,0 +1,29 @@
+ALERT !!!.
+
+The last centos update (7.2.1511) came with an IPROUTE version which
+breaks some neutron functions related to routers and networks. See
+bug:
+
+https://bugs.launchpad.net/neutron/+bug/1528977
+
+A patch is in the works, but, meanwhile you can just downgrade the
+iproute package by issuing the following commands:
+
+cd /tmp
+wget http://vault.centos.org/7.1.1503/os/x86_64/Packages/iproute-3.10.0-21.el7.x86_64.rpm
+yum -y downgrade ./iproute-3.10.0-21.el7.x86_64.rpm
+
+And then, avoid yum to "update" the package by incluing in the "yum" exclude
+list:
+
+crudini --set /etc/yum.conf main exclude iproute
+
+This is affecting Centos neutron packages 7.0.0-1 and 7.0.1-1. Eventually
+OpenStack RDO maintainers will release a fixed version and you will need
+to erase the "exclude" sentence in your /etc/yum.conf and update the
+iproute package again.
+
+NOTE: For your convenience, we included the "downgrade" iproute package in
+the directory ./libs/iproute. That "just in case" you are unable to download
+from the link in "vault.centos.org".
+
