@@ -71,6 +71,12 @@ yum install -y openstack-heat-api \
 	openstack-utils \
 	openstack-selinux
 
+yum -y install python-zaqarclient python-manilaclient 
+
+# pip install python-mistralclient
+# pip install python-magnumclient
+# yum -y install python2-keystoneauth1
+
 echo "Done"
 echo ""
 
@@ -137,6 +143,15 @@ crudini --set /etc/heat/heat.conf keystone_authtoken signing_dir /tmp/keystone-s
 crudini --set /etc/heat/heat.conf keystone_authtoken auth_version v3
 crudini --set /etc/heat/heat.conf keystone_authtoken auth_plugin password
 crudini --set /etc/heat/heat.conf keystone_authtoken auth_section keystone_authtoken
+#
+crudini --set /etc/heat/heat.conf keystone_authtoken identity_uri http://$keystonehost:35357
+crudini --set /etc/heat/heat.conf keystone_authtoken admin_tenant_name $keystoneservicestenant
+crudini --set /etc/heat/heat.conf keystone_authtoken admin_user $heatuser
+crudini --set /etc/heat/heat.conf keystone_authtoken admin_password $heatpass
+#
+crudini --del /etc/heat/heat.conf keystone_authtoken auth_host
+crudini --del /etc/heat/heat.conf keystone_authtoken auth_port
+crudini --del /etc/heat/heat.conf keystone_authtoken auth_protocol
  
 crudini --set /etc/heat/heat.conf trustee project_name $keystoneservicestenant
 crudini --set /etc/heat/heat.conf trustee username $heatuser
@@ -147,6 +162,11 @@ crudini --set /etc/heat/heat.conf trustee project_domain_id $keystonedomain
 crudini --set /etc/heat/heat.conf trustee user_domain_id $keystonedomain
 crudini --set /etc/heat/heat.conf trustee signing_dir /tmp/keystone-signing-heat
 crudini --set /etc/heat/heat.conf trustee auth_version v3
+#
+crudini --set /etc/heat/heat.conf trustee identity_uri http://$keystonehost:35357
+crudini --set /etc/heat/heat.conf trustee admin_tenant_name $keystoneservicestenant
+crudini --set /etc/heat/heat.conf trustee admin_user $heatuser
+crudini --set /etc/heat/heat.conf trustee admin_password $heatpass
  
 crudini --set /etc/heat/heat.conf clients_keystone auth_uri http://$keystonehost:5000
  
