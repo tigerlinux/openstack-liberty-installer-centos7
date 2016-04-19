@@ -203,6 +203,11 @@ esac
 crudini --set /etc/heat/heat.conf DEFAULT stack_domain_admin $stack_domain_admin
 crudini --set /etc/heat/heat.conf DEFAULT stack_domain_admin_password $stack_domain_admin_password
 crudini --set /etc/heat/heat.conf DEFAULT stack_user_domain_name $stack_user_domain_name
+
+if [ $ceilometerinstall == "yes" ]
+then
+        crudini --set /etc/heat/heat.conf oslo_messaging_notifications driver messagingv2
+fi
  
 echo ""
 echo "Heat Configured"

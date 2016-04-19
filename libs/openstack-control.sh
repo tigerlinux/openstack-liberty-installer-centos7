@@ -184,6 +184,7 @@ then
 			openstack-ceilometer-api
 			openstack-ceilometer-collector
 			openstack-ceilometer-notification
+			openstack-ceilometer-polling
 			$alarm1
 			$alarm2
 			"
@@ -196,6 +197,7 @@ then
 			openstack-ceilometer-api
 			openstack-ceilometer-collector
 			openstack-ceilometer-notification
+			openstack-ceilometer-polling
 			$alarm1
 			$alarm2
 			"
