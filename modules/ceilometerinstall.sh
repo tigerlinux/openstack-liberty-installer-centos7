@@ -330,7 +330,7 @@ fi
 # Ceilometer User need to be part of nova and qemu/kvm/libvirt groups
 #
 
-usermod -G qemu,kvm,nova,root ceilometer > /dev/null 2>&1
+usermod -a -G libvirt,nova,kvm,qemu ceilometer > /dev/null 2>&1
 
 if [ $ceilometer_in_compute_node == "no" ]
 then

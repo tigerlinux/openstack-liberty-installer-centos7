@@ -1,3 +1,7 @@
+1.0.9.el7 - May 04, 2016
+
+- Minor corrections on Ceilometer install module
+
 1.0.8.el7 - April 19, 2016
 
 - Added and changed config items for ceilometer.
