@@ -1,3 +1,7 @@
+1.0.10.el7 - May 17, 2016
+
+- Added missing config item in glance registry.
+
 1.0.9.el7 - May 04, 2016
 
 - Minor corrections on Ceilometer install module

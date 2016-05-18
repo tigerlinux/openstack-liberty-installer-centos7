@@ -5,8 +5,8 @@
 # E-Mail: TigerLinux@Gmail.com
 #
 # Main Installer Script
-# Version: 1.0.9.el7 "Nuclear Lynx"
-# May 04, 2016
+# Version: 1.0.10.el7 "Nuclear Lynx"
+# May 17, 2016
 #
 
 PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
@@ -72,7 +72,7 @@ case $1 in
 	echo "Flavor: OpenStack LIBERTY for Centos 7"
 	echo "Made by: Reynaldo R. Martinez P."
 	echo "E-Mail: TigerLinux@Gmail.com"
-	echo "Version 1.0.9.el7 \"Nuclear Lynx\" - May 04, 2016"
+	echo "Version 1.0.10.el7 \"Nuclear Lynx\" - May 17, 2016"
 	echo ""
 	echo "I'll verify all requiremens"
 	echo "If any requirement is not met, I'll stop and inform what's missing"
