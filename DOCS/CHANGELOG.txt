@@ -1,3 +1,13 @@
+1.0.11.el7 - May 28, 2016
+
+- Minor modifications in neutron install module.
+- Added new script for cpu metrics report:
+  "instance-cpu-metrics-report.sh".
+  This script reports the min/max/avg cpu usage
+  for every active instance in your cloud. This
+  script requires ceilometer installed and fully
+  active.
+
 1.0.10.el7 - May 17, 2016
 
 - Added missing config item in glance registry.

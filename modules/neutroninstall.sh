@@ -640,27 +640,24 @@ echo ""
 echo "Done"
 echo ""
 
-echo ""
-echo "Provisioning NEUTRON database"
-echo ""
-
 #
-# Then we provision/update Neutron database
+# Then we provision/update Neutron database, if this is NOT a compute node
 #
 
-#
-# Then we provision/update Neutron database
-#
+if [ $neutron_in_compute_node == "no" ]
+then
+	echo ""
+	echo "Provisioning NEUTRON database"
+	echo ""
+	su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf \
+        	--config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade liberty" neutron
 
-su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf \
-        --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade liberty" neutron
-
-#
-# Fix for BUG: https://bugs.launchpad.net/neutron/+bug/1463830
-#
-su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf \
-	--config-file /etc/neutron/plugin.ini --service fwaas upgrade liberty" neutron
-
+	#
+	# Fix for BUG: https://bugs.launchpad.net/neutron/+bug/1463830
+	#
+	su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf \
+		--config-file /etc/neutron/plugin.ini --service fwaas upgrade liberty" neutron
+fi
 
 sync
 sleep 2
